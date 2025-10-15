@@ -1,0 +1,62 @@
+[project]
+name = "baxbench"
+version = "1.0.0"
+description = "A coding benchmark for evaluating the ability of LLMs on generating correct and secure code in realistic, security-critical settings"
+authors = [
+    {name = "Mark Vero"},
+    {name = "Niels Mündler"},
+    {name = "Victor Chibotaru"},
+    {name = "Veselin Raychev"},
+    {name = "Maximilian Baader"},
+    {name = "Nikola Jovanović"},
+    {name = "Jingxuan He"},
+    {name = "Martin Vechev"}
+]
+requires-python = ">=3.12"
+readme = "README.md"
+license = {text = "MIT"}
+
+dependencies = [
+    "requests",
+    "openai",
+    "docker",
+    "tabulate",
+    "simple-parsing",
+    "tqdm",
+    "termcolor",
+    "pre-commit",
+    "ipython",
+    "mypy==1.14.1",
+    "types-requests",
+    "types-tqdm",
+    "types-tabulate",
+    "docker-stubs",
+    "anthropic",
+    "pdfplumber",
+    "imageio",
+    "types-pyyaml",
+    "matplotlib",
+]
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-64", "osx-arm64", "win-64"]
+
+[tool.pixi.pypi-dependencies]
+baxbench = { path = ".", editable = true }
+
+[tool.pixi.tasks]
+generate = "python baxbench/main.py --mode generate"
+test = "python baxbench/main.py --mode test"
+evaluate = "python baxbench/main.py --mode evaluate"
+mypy = "bash scripts/run_mypy.sh"
+pre-commit = "pre-commit"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["baxbench*"]
+

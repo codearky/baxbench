@@ -31,9 +31,42 @@ The scenarios can be found [here](src/scenarios/), while all supported framework
 
 **Prerequisites:**
 
+> `docker`: Follow the instructions for installing Docker Desktop [here](https://docs.docker.com/desktop/) (Windows, MacOS, Linux) or for the Docker engine [here](https://docs.docker.com/engine/install/) (Linux). Make sure that Docker has root privileges on your machine.
+
+### Option 1: Using Pixi (Recommended)
+
+> `pixi`: Install pixi by following the instructions [here](https://pixi.sh/latest/#installation).
+
+**Setting up the environment and running scripts**
+
+After installing pixi, you can install the environment by running:
+```bash
+pixi install
+```
+
+To run any Python script in the project environment, use:
+```bash
+pixi run python <path_to_python_script> <args>
+```
+
+Or use the provided tasks:
+```bash
+pixi run generate  # Generate solutions
+pixi run test      # Test generated solutions
+pixi run evaluate  # Evaluate and print results
+pixi run mypy      # Run mypy type checking
+```
+
+You can also import baxbench as a package:
+```python
+from baxbench.scenarios import all_scenarios
+from baxbench.env import all_envs
+```
+
+### Option 2: Using Pipenv
+
 > `python 3.12`: Install it from [here](https://www.python.org/downloads/).<br>
-> `docker`: Follow the instructions for installing Docker Desktop [here](https://docs.docker.com/desktop/) (Windows, MacOS, Linux) or for the Docker engine [here](https://docs.docker.com/engine/install/) (Linux). Make sure that Docker has root privileges on your machine.<br>
-> `pipenv`: The project uses pipenv for package management. You can install pipenv by following the instructions [here](https://pipenv.pypa.io/en/latest/).
+> `pipenv`: Install pipenv by following the instructions [here](https://pipenv.pypa.io/en/latest/).
 
 **Setting up the environment and running scripts**
 
@@ -55,6 +88,24 @@ export OPENROUTER_API_KEY="<your_API_key>"
 
 > **Note:** You may set any API key you do not intend to use simply to an empty or invalid string.
 
+## 🔗 Using BaxBench from Another Project
+
+If you want to use BaxBench as a dependency in another pixi project, see the [guide on importing from other projects](./IMPORTING_FROM_OTHER_PROJECTS.md).
+
+Quick example - add this to your project's `pyproject.toml`:
+
+```toml
+[tool.pixi.pypi-dependencies]
+baxbench = { path = "/path/to/baxbench", editable = true }
+```
+
+Then import and use:
+
+```python
+from baxbench.scenarios import all_scenarios
+from baxbench.env import all_envs
+```
+
 ## 💫 Contributing
 
 We welcome contributions from the community. You may contribute by:
@@ -72,7 +123,7 @@ We welcome contributions from the community. You may contribute by:
     > If you identify any issues or want to share feedback with us, you may either contact us directly or raise an issue on GitHub.
 We are looking forward to working with the community and are extremely thankful for any contributions!
 
-> **Note:** Before contributing code, please run `pipenv run pre-commit install` in the root once to set up the pre-commit hooks.
+> **Note:** Before contributing code, please run `pixi run pre-commit install` (or `pipenv run pre-commit install` if using pipenv) in the root once to set up the pre-commit hooks.
 
 ## 👨🏻‍💻 Usage
 
@@ -80,7 +131,13 @@ We are looking forward to working with the community and are extremely thankful 
 
 To generate solutions to _all_ scenarios in the `scenarios` list, run the following command:
 
-`pipenv run python src/main.py --models gpt-4o --mode generate --n_samples 10 --temperature 0.4`
+```bash
+# Using pixi
+pixi run python baxbench/main.py --models gpt-4o --mode generate --n_samples 10 --temperature 0.4
+
+# Or using pipenv
+pipenv run python baxbench/main.py --models gpt-4o --mode generate --n_samples 10 --temperature 0.4
+```
 
 To restrict the generation to a subset of scenarios or environments, see the ["Advanced" section](#advanced) below.
 
@@ -88,7 +145,13 @@ The programs and the generation logs will be saved in the directory `results`.
 
 #### Testing generated programs
 
-Run: `pipenv run python src/main.py --models gpt-4o --mode test --n_samples 10 --temperature 0.4` to test your generated solutions.
+```bash
+# Using pixi
+pixi run python baxbench/main.py --models gpt-4o --mode test --n_samples 10 --temperature 0.4
+
+# Or using pipenv
+pipenv run python baxbench/main.py --models gpt-4o --mode test --n_samples 10 --temperature 0.4
+```
 
 If you have generated solutions externally, e.g., using our [Hugging Face dataset](https://huggingface.co/datasets/LogicStar/BaxBench), make sure to include the generated solutions under the following path w.r.t. the root of this repository:
 
@@ -98,7 +161,13 @@ Then set the corresponding parameters in the testing command accordingly. See ["
 
 #### Evaluating and printing
 
-Run: `pipenv run python src/main.py --models gpt-4o --mode evaluate --n_samples 10 --temperature 0.4` to print your results to a table in your console.
+```bash
+# Using pixi
+pixi run python baxbench/main.py --models gpt-4o --mode evaluate --n_samples 10 --temperature 0.4
+
+# Or using pipenv
+pipenv run python baxbench/main.py --models gpt-4o --mode evaluate --n_samples 10 --temperature 0.4
+```
 
 #### Advanced
 
